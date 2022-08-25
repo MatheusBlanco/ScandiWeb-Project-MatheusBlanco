@@ -1,18 +1,18 @@
-const text = (state = "", action) => {
+const currency = (state = "$", action) => {
   switch (action.type) {
-    case "SET_TEXT":
+    case "SET_CURRENCY":
       return {
         ...state,
         value: action.payload,
       };
-    case "CLEAR_TEXT":
+    case "CLEAR_CURRENCY":
       return {
         ...state,
-        value: "",
+        value: "$",
       };
     default:
       return state;
   }
 };
 
-export default text;
+export default currency;

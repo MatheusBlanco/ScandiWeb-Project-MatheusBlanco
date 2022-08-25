@@ -26,6 +26,7 @@
     "react/prop-types": "off",
     "react/no-unused-class-component-methods": "warn",
     "react/no-unused-state": "warn",
-    "react/state-in-constructor": "off"
+    "react/state-in-constructor": "off",
+    "react/no-array-index-key": "off"
   }
 }

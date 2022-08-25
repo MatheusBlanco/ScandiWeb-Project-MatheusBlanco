@@ -12,7 +12,7 @@ class Router extends Component {
         </div>
         <Routes>
           <Route path="/" element={<ComponentOne />} />
-          <Route path="/lol" element={<div>lol</div>} />
+          <Route path="/lol" element={<ComponentOne />} />
         </Routes>
       </>
     );

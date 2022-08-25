@@ -1,11 +1,14 @@
+/* eslint-disable no-shadow */
 import React, { Component } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
 import Logo from "../assets/images/logo.svg";
 import EmptyCart from "../assets/images/EmptyCart.svg";
 import "../assets/styles/topbar.css";
 import Select from "./Select";
 import getCurrency from "../api/currency";
+import { setCurrency } from "../actions/currencyActions";
 
 class TopBar extends Component {
   menu = [
@@ -16,7 +19,7 @@ class TopBar extends Component {
 
   state = {
     currencies: [],
-    currencyOption: "USD",
+    currencyOption: "$",
   };
 
   componentDidMount() {
@@ -30,13 +33,15 @@ class TopBar extends Component {
   };
 
   render() {
-    const { currencies } = this.state;
+    const { currencies, currencyOption } = this.state;
+    const { setCurrency } = this.props;
     return (
       <StyledTopBar>
         <div style={{ maxWidth: "12,2vw" }}>
-          {this.menu?.map((item) => {
+          {this.menu?.map((item, index) => {
             return (
               <NavLink
+                key={index}
                 to={item.redirectTo}
                 className={({ isActive }) => (isActive ? "active" : "inactive")}
               >
@@ -48,9 +53,12 @@ class TopBar extends Component {
         <StyledLogo src={Logo} alt="" />
         <StyledActions>
           <Select
-            defaultPlaceholder="$"
+            defaultPlaceholder={currencyOption || "$"}
             options={currencies}
-            onOptionClick={(e) => this.setState({ currencyOption: e })}
+            onOptionClick={(e) => {
+              this.setState({ currencyOption: e });
+              setCurrency(e);
+            }}
           />
           <img style={{ marginLeft: 10 }} src={EmptyCart} alt="" />
         </StyledActions>
@@ -83,4 +91,9 @@ const StyledTopBar = styled.nav`
   justify-content: space-between;
 `;
 
-export default TopBar;
+function mapStateToProps(state) {
+  const { currency } = state;
+  return { currency };
+}
+
+export default connect(mapStateToProps, { setCurrency })(TopBar);

@@ -1,10 +1,8 @@
 import { combineReducers } from "redux";
-import counter from "./counter";
-import text from "./text";
+import currency from "./currency";
 
 const rootReducer = combineReducers({
-  counter,
-  text,
+  currency,
 });
 
 export default rootReducer;
