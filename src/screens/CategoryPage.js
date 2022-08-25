@@ -30,10 +30,19 @@ class CategoryPage extends Component {
         }}
       >
         <StyledCategory>Category {allItems?.category?.name}</StyledCategory>
-        {allItems?.category?.products?.length &&
-          allItems?.category?.products.map((product) => {
-            return <ProductCard product={product} />;
-          })}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            flexWrap: "wrap",
+          }}
+        >
+          {allItems?.category?.products?.length &&
+            allItems?.category?.products.map((product, index) => {
+              return <ProductCard key={index} product={product} />;
+            })}
+        </div>
       </div>
     );
   }

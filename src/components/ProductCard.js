@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 class ProductCard extends Component {
@@ -20,7 +21,14 @@ class ProductCard extends Component {
   render() {
     const { product } = this.props;
     return (
-      <StyledCard>
+      <StyledCard
+        to={{
+          pathname: `/product/${product?.id}`,
+          aboutProps: {
+            selectedidds: product,
+          },
+        }}
+      >
         <StyledStockDiv stock={product?.inStock}>
           <img
             src={product.gallery[0]}
@@ -66,14 +74,18 @@ const StyledStockDiv = styled.div`
   align-self: center;
 `;
 
-const StyledCard = styled.div`
+const StyledCard = styled(NavLink)`
   width: 20.104166666666668vw;
   height: 47.43vh;
   padding: 16px;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  color: var(--text-black);
+  border: none;
   justify-content: space-around;
   transition: 300ms;
+  margin-left: 6.5%;
   &:hover {
     box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
   }
