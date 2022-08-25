@@ -134,7 +134,6 @@ const StyledOption = styled.div`
   background-color: var(--white);
   display: flex;
   padding: 8px 35px 8px 28px;
-  margin-right: 35px;
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;

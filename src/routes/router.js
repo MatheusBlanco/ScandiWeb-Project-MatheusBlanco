@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Routes } from "react-router-dom";
-import ComponentOne from "../components/ComponentOne";
+import CategoryPage from "../screens/CategoryPage";
 import TopBar from "../components/TopBar";
 
 class Router extends Component {
@@ -11,8 +11,8 @@ class Router extends Component {
           <TopBar />
         </div>
         <Routes>
-          <Route path="/" element={<ComponentOne />} />
-          <Route path="/lol" element={<ComponentOne />} />
+          <Route path="/" element={<CategoryPage />} />
+          <Route path="/lol" element={<CategoryPage />} />
         </Routes>
       </>
     );

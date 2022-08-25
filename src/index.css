@@ -15,5 +15,9 @@ code {
 :root {
   --white: white;
   --primary-green: #5ece7b;
+
   --light-grey: #eeeeee;
+  --grey: #8d8f9a;
+
+  --text-black: #1d1f22;
 }

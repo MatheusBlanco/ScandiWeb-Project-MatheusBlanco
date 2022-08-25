@@ -27,6 +27,8 @@
     "react/no-unused-class-component-methods": "warn",
     "react/no-unused-state": "warn",
     "react/state-in-constructor": "off",
-    "react/no-array-index-key": "off"
+    "react/no-array-index-key": "off",
+    "import/prefer-default-export": "off",
+    "no-alert": "off"
   }
 }
