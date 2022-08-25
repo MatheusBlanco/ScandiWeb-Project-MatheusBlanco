@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 class ProductCard extends Component {
@@ -24,9 +24,6 @@ class ProductCard extends Component {
       <StyledCard
         to={{
           pathname: `/product/${product?.id}`,
-          aboutProps: {
-            selectedidds: product,
-          },
         }}
       >
         <StyledStockDiv stock={product?.inStock}>
@@ -74,7 +71,7 @@ const StyledStockDiv = styled.div`
   align-self: center;
 `;
 
-const StyledCard = styled(NavLink)`
+const StyledCard = styled(Link)`
   width: 20.104166666666668vw;
   height: 47.43vh;
   padding: 16px;
