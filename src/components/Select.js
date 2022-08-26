@@ -100,6 +100,7 @@ class Select extends Component {
 const StyledBold = styled.span`
   font-weight: 500;
   padding-right: 0.5vw;
+  font-family: "Raleway";
 `;
 const StyledSelect = styled.span`
   width: 100%;
@@ -130,6 +131,8 @@ const StyledInputDiv = styled.div`
 const StyledOption = styled.div`
   width: 100%;
   font-size: 16px;
+  font-family: "Raleway";
+
   color: black;
   background-color: var(--white);
   display: flex;

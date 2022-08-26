@@ -21,11 +21,7 @@ class ProductCard extends Component {
   render() {
     const { product } = this.props;
     return (
-      <StyledCard
-        to={{
-          pathname: `/product/${product?.id}`,
-        }}
-      >
+      <StyledCard to={`/product/${product?.id}`}>
         <StyledStockDiv stock={product?.inStock}>
           <img
             src={product.gallery[0]}
@@ -56,6 +52,8 @@ class ProductCard extends Component {
 const StyledStockSpan = styled.span`
   font-weight: 400;
   font-size: 24px;
+  font-family: "Raleway";
+
   line-height: 160%;
   position: relative;
   top: -54%;
@@ -91,6 +89,8 @@ const StyledCard = styled(Link)`
 const StyledName = styled.span`
   font-weight: 300;
   font-size: 18px;
+  font-family: "Raleway";
+
   line-height: 160%;
   opacity: ${({ stock }) => (stock ? "1.0" : "0.5")};
 `;
@@ -104,9 +104,12 @@ const StyledInfo = styled.div`
 const StyledPrice = styled.span`
   font-weight: 500;
   font-size: 18px;
+  font-family: "Raleway";
+
   line-height: 160%;
   opacity: ${({ stock }) => (stock ? "1.0" : "0.5")};
 `;
+
 function mapStateToProps(state) {
   const { currency } = state;
   return { currency };

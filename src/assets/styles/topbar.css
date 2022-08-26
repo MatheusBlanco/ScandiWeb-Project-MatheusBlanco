@@ -4,11 +4,13 @@
   padding-bottom: 3.1vh;
   padding-right: 0.83vw;
   padding-left: 0.83vw;
+  font-family: "Raleway";
   border-bottom: 2px solid var(--primary-green);
 }
 
 .inactive {
   color: black;
+  font-family: "Raleway";
   font-weight: 400;
   padding-bottom: 3.1vh;
   padding-right: 0.83vw;

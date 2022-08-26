@@ -13,8 +13,8 @@ import { setCurrency } from "../actions/currencyActions";
 class TopBar extends Component {
   menu = [
     { label: "WOMEN", redirectTo: "/" },
-    { label: "MEN", redirectTo: "/lol" },
-    { label: "KIDS", redirectTo: "/lol" },
+    { label: "MEN", redirectTo: "/men" },
+    { label: "KIDS", redirectTo: "/kids" },
   ];
 
   state = {
