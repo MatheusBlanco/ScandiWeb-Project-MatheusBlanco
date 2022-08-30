@@ -7,9 +7,6 @@ class ProductPage extends Component {
   state = {
     product: null,
     selectedPhoto: 0,
-    selectedSize: null,
-    selectedCapacity: null,
-    selectedColor: null,
     selectedAttributes: [],
   };
 
@@ -38,16 +35,31 @@ class ProductPage extends Component {
     );
   };
 
-  render() {
-    const {
-      product,
-      selectedPhoto,
-      selectedSize,
-      selectedCapacity,
-      selectedColor,
-      selectedAttributes,
-    } = this.state;
+  handleSelectedAttributes = (item, attribute) => {
+    const { selectedAttributes } = this.state;
+    const attr = { ...item, attrId: attribute?.id };
+    this.setState((prevState) => {
+      const foundState =
+        ("prevstate",
+        prevState?.selectedAttributes.find(
+          (selAt) => selAt?.attrId === attr?.attrId
+        ));
+      if (foundState) {
+        return {
+          selectedAttributes: selectedAttributes
+            .filter((sat) => sat.attrId !== attr?.attrId)
+            .concat([attr]),
+        };
+      }
+      return { selectedAttributes: selectedAttributes?.concat([attr]) };
+    });
+  };
 
+  render() {
+    const { product, selectedPhoto, selectedAttributes } = this.state;
+    const handleSendToCart = () => {
+      return false;
+    };
     const renderAttributes = () => {
       return (
         <div>
@@ -62,30 +74,24 @@ class ProductPage extends Component {
                     attribute?.type === "text" ? (
                       <StyledTextTypeItem
                         onClick={() =>
-                          this.setState({
-                            selectedAttributes: selectedAttributes.concat([
-                              item,
-                            ]),
-                          })
+                          this.handleSelectedAttributes(item, attribute)
                         }
                         index={index}
                         item={item}
-                        type={attribute?.type}
-                        selectedItem={
-                          attribute.id === "Size"
-                            ? selectedSize
-                            : selectedCapacity
-                        }
+                        attribute={attribute}
+                        selectedItem={selectedAttributes}
                       >
                         {item.displayValue}
                       </StyledTextTypeItem>
                     ) : (
                       <StyledColorTypeItem
-                        onClick={() => this.setState({ selectedColor: item })}
+                        onClick={() =>
+                          this.handleSelectedAttributes(item, attribute)
+                        }
                         index={index}
                         item={item}
-                        type={attribute?.type}
-                        selectedItem={selectedColor}
+                        attribute={attribute}
+                        selectedItem={selectedAttributes}
                         style={{ backgroundColor: item?.value }}
                       />
                     )
@@ -162,8 +168,18 @@ class ProductPage extends Component {
             <StyledTitle>PRICE:</StyledTitle>
             <StyledPrice>{this.handleCurrency(product?.prices)}</StyledPrice>
           </StyledAttribute>
-          <StyledCartButton>ADD TO CART</StyledCartButton>
-          <StyledDescription>{product?.description}</StyledDescription>
+          <StyledCartButton
+            disabled={!product?.inStock}
+            onClick={() => {
+              handleSendToCart();
+            }}
+            inStock={product?.inStock}
+          >
+            {product?.inStock ? "ADD TO CART" : "OUT OF STOCK"}
+          </StyledCartButton>
+          <StyledDescription
+            dangerouslySetInnerHTML={{ __html: product?.description }}
+          />
         </StyledActions>
       </StyledMainDiv>
     );
@@ -176,10 +192,12 @@ const StyledCartButton = styled.button`
   align-items: center;
   width: 292px;
   border: none;
-  background: var(--primary-green);
-  color: white;
+  background: ${({ inStock }) =>
+    inStock ? " var(--primary-green)" : "var(--light-grey)"};
+  color: ${({ inStock }) => (inStock ? " var(--white)" : "var(--grey)")};
   padding: 16px 32px;
   font-family: "Raleway";
+  cursor: pointer;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -229,6 +247,26 @@ const StyledDescription = styled.p`
   line-height: 159.96%;
   text-align: justify;
   max-width: 292px;
+  max-height: 53.022269353128316vh;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  ::-webkit-scrollbar {
+    width: 3px;
+    margin-left: 5px;
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    width: 4px;
+    background: none;
+  }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-green);
+    width: 2px;
+  }
 `;
 
 const StyledPrice = styled.span`
@@ -242,12 +280,20 @@ const StyledPrice = styled.span`
 
 const StyledTextTypeItem = styled.button`
   width: 3.28125vw;
-  background: ${({ item, selectedItem }) =>
-    selectedItem?.id === item?.id ? "var(--text-black)" : "none"};
-  color: ${({ item, selectedItem }) =>
-    selectedItem?.id !== item?.id ? "var(--text-black)" : "white"};
-  cursor: pointer;
   height: 4.7720042417815485vh;
+  background: ${({ item, selectedItem, attribute }) =>
+    selectedItem?.find(
+      (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
+    )
+      ? "var(--text-black)"
+      : "none"};
+  color: ${({ item, selectedItem, attribute }) =>
+    selectedItem?.find(
+      (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
+    )
+      ? "white"
+      : "var(--text-black)"};
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -265,10 +311,14 @@ const StyledTextTypeItem = styled.button`
 `;
 
 const StyledColorTypeItem = styled.button`
-  width: 2vw;
-  height: 3.393425238600212vh;
-  border: ${({ item, selectedItem }) =>
-    selectedItem?.id === item?.id ? "2px solid var(--primary-green)" : "none"};
+  width: 32px;
+  height: 32px;
+  border: ${({ item, selectedItem, attribute }) =>
+    selectedItem?.find(
+      (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
+    )
+      ? "2px solid var(--primary-green)"
+      : "2px solid var(--light-grey)"};
   cursor: pointer;
 
   display: flex;
