@@ -3,13 +3,14 @@ import styled from "styled-components";
 
 class StyledColorAttribute extends Component {
   render() {
-    const { selectedAttributes, attribute, index, item, onClickFunc } =
+    const { selectedAttributes, attribute, index, item, onClickFunc, noHover } =
       this.props;
     return (
       <StyledColorTypeItem
         onClick={onClickFunc}
         index={index}
         key={index}
+        noHover={noHover}
         item={item}
         attribute={attribute}
         selectedItem={selectedAttributes}
@@ -28,7 +29,7 @@ const StyledColorTypeItem = styled.button`
     )
       ? "2px solid var(--primary-green)"
       : "2px solid var(--light-grey)"};
-  cursor: pointer;
+  cursor: ${({ noHover }) => (noHover ? "" : "pointer")};
 
   display: flex;
   padding: 1px;
@@ -37,7 +38,10 @@ const StyledColorTypeItem = styled.button`
   margin: ${({ index }) => (index === 0 ? "8px 6px 8px 0px" : "8px 6px")};
 
   &:hover {
-    border: 2px solid var(--primary-green);
+    border: ${({ noHover }) =>
+      noHover
+        ? "2px solid var(--light-grey)"
+        : "2px solid var(--primary-green)"};
   }
 `;
 

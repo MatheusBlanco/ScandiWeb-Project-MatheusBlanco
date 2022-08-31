@@ -3,12 +3,13 @@ import styled from "styled-components";
 
 class StyledTextAttribute extends Component {
   render() {
-    const { selectedAttributes, attribute, index, item, onClickFunc } =
+    const { selectedAttributes, attribute, index, item, onClickFunc, noHover } =
       this.props;
     return (
       <StyledTextTypeItem
         onClick={onClickFunc}
         index={index}
+        noHover={noHover}
         key={index}
         item={item}
         attribute={attribute}
@@ -35,7 +36,7 @@ const StyledTextTypeItem = styled.button`
     )
       ? "white"
       : "var(--text-black)"};
-  cursor: pointer;
+  cursor: ${({ noHover }) => (noHover ? "" : "pointer")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,8 +48,8 @@ const StyledTextTypeItem = styled.button`
   font-size: 1.5vmin;
 
   &:hover {
-    background: var(--border-black);
-    color: white;
+    background: ${({ noHover }) => (noHover ? "none" : "var(--border-black)")};
+    color: ${({ noHover }) => (noHover ? "var(--text-black)" : "white")};
   }
 `;
 

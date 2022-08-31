@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getAllItems } from "../api/products";
 import ProductCard from "../components/ProductCard";
+import StyledMainDiv from "../components/Styled/StyledMainDiv";
 import StyledTitle from "../components/Styled/StyledTitle";
 
 class CategoryPage extends Component {
@@ -22,13 +23,7 @@ class CategoryPage extends Component {
   render() {
     const { allItems } = this.state;
     return (
-      <div
-        style={{
-          paddingLeft: "5vw",
-          paddingRight: "5vw",
-          paddingBottom: "5vw",
-        }}
-      >
+      <StyledMainDiv>
         <StyledTitle
           weight={400}
           child={`
@@ -48,7 +43,7 @@ class CategoryPage extends Component {
               return <ProductCard key={index} product={product} />;
             })}
         </div>
-      </div>
+      </StyledMainDiv>
     );
   }
 }

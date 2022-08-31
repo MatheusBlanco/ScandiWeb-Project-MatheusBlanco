@@ -63,7 +63,7 @@ class TopBar extends Component {
           <StyledCart type="button">
             <img style={{ marginLeft: 10 }} src={EmptyCart} alt="" />
             {cart?.items?.length > 0 ? (
-              <StyledCartAmmount>{cart?.items?.length}</StyledCartAmmount>
+              <StyledCartAmount>{cart?.items?.length}</StyledCartAmount>
             ) : null}
           </StyledCart>
         </StyledActions>
@@ -79,7 +79,7 @@ const StyledCart = styled.button`
   cursor: pointer;
 `;
 
-const StyledCartAmmount = styled.div`
+const StyledCartAmount = styled.div`
   height: 20px;
   width: 20px;
   background-color: var(--border-black);
@@ -110,15 +110,16 @@ const StyledActions = styled.div`
 `;
 
 const StyledTopBar = styled.nav`
-  position: relative;
+  position: fixed;
   width: 90%;
   top: 0;
-  left: 0;
+  left: 5%;
   background-color: white;
   height: 8.5vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 1;
 `;
 
 function mapStateToProps(state) {

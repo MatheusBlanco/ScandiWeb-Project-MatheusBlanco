@@ -5,9 +5,10 @@ function StyledTitle({ child, weight }) {
   return <Styledp weight={weight}>{child}</Styledp>;
 }
 
-const Styledp = styled.p`
+const Styledp = styled.span`
   width: 299px;
   height: 68px;
+  margin-top: 3vh;
   left: calc(50% - 15.57vw / 2 - 24.42px);
   top: calc(50% - 6.8vh / 2 - 56.25vh);
 

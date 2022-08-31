@@ -7,6 +7,9 @@ import { getItemById } from "../api/products";
 import { addItem } from "../actions/cartActions";
 import StyledTextAttribute from "../components/Styled/StyledTextAttribute";
 import StyledColorAttribute from "../components/Styled/StyledColorAttribute";
+import StyledProductName from "../components/Styled/StyledProductName";
+import StyledMainDiv from "../components/Styled/StyledMainDiv";
+import StyledPrice from "../components/Styled/StyledPrice";
 
 class ProductPage extends Component {
   state = {
@@ -24,20 +27,6 @@ class ProductPage extends Component {
     return getItemById(id)
       .then((res) => this.setState({ product: res?.product }))
       .catch((e) => alert(e));
-  };
-
-  handleCurrency = (prices) => {
-    const { currency } = this.props;
-    const foundCurrency = prices?.find(
-      (price) =>
-        price?.currency.symbol === currency ||
-        price?.currency.symbol === currency?.value
-    );
-    return (
-      <span>
-        {foundCurrency?.currency?.symbol} {foundCurrency?.amount}
-      </span>
-    );
   };
 
   handleSelectedAttributes = (item, attribute) => {
@@ -60,11 +49,12 @@ class ProductPage extends Component {
 
   render() {
     const { product, selectedPhoto, selectedAttributes } = this.state;
-    const { addItem } = this.props;
+    const { addItem, currency } = this.props;
 
     const handleSendToCart = (productToCart, attributes) => {
       const productItem = {
         ...productToCart,
+        amount: 1,
         selectedAttributes: attributes,
       };
       addItem(productItem);
@@ -75,9 +65,9 @@ class ProductPage extends Component {
           {product?.attributes?.map((attribute) => {
             return (
               <StyledAttribute key={attribute?.id}>
-                <StyledTitle className="roboto">
+                <StyledId className="roboto">
                   {attribute?.id.toUpperCase()}:
-                </StyledTitle>
+                </StyledId>
                 <StyledItemRow>
                   {attribute?.items.map((item, index) =>
                     attribute?.type === "text" ? (
@@ -115,82 +105,86 @@ class ProductPage extends Component {
 
     return (
       <StyledMainDiv>
-        <StyledGallery>
-          {product?.gallery.map((photo, index) => {
-            return (
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-                type="button"
-                key={index}
-                onClick={() => this.setState({ selectedPhoto: index })}
-              >
-                <img
-                  src={photo}
-                  alt={product?.name}
+        <StyledProduct>
+          <StyledGallery>
+            {product?.gallery.map((photo, index) => {
+              return (
+                <button
                   style={{
-                    width: "4.563020833333334vw",
-                    height: "9.290562036055142vh",
-                    objectFit: "contain",
-                    alignSelf: "center",
-                    margin:
-                      index === 0
-                        ? "0px 10px 32px 10px"
-                        : "32px 10px 32px 10px",
-                    opacity: product?.inStock ? "1.0" : "0.5",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
                   }}
-                />
-              </button>
-            );
-          })}
-        </StyledGallery>
-        <StyledStockDiv
-          style={{
-            display: "flex",
-            alignItems: "center",
-            margin: "0px 100px 10px 40px",
-          }}
-        >
-          <img
-            src={product?.gallery[selectedPhoto]}
-            alt={product?.name}
+                  type="button"
+                  key={index}
+                  onClick={() => this.setState({ selectedPhoto: index })}
+                >
+                  <img
+                    src={photo}
+                    alt={product?.name}
+                    style={{
+                      width: "4.563020833333334vw",
+                      height: "9.290562036055142vh",
+                      objectFit: "contain",
+                      alignSelf: "center",
+                      margin:
+                        index === 0
+                          ? "0px 10px 32px 10px"
+                          : "32px 10px 32px 10px",
+                      opacity: product?.inStock ? "1.0" : "0.5",
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </StyledGallery>
+          <StyledStockDiv
             style={{
-              width: "31.770833333333332vw",
-              height: "54.18875927889714vh",
-              objectFit: "contain",
-              justifyContent: "center",
-              opacity: product?.inStock ? "1.0" : "0.5",
+              display: "flex",
+              alignItems: "center",
+              margin: "-40px 100px 10px 40px",
             }}
-          />
-          <StyledStockSpan>
-            {!product?.inStock ? "OUT OF STOCK" : ""}
-          </StyledStockSpan>
-        </StyledStockDiv>
-        <StyledActions>
-          <StyledBrand>{product?.brand}</StyledBrand>
-          <StyledName>{product?.name}</StyledName>
-          <StyledAttributes>{renderAttributes()}</StyledAttributes>
-          <StyledAttribute>
-            <StyledTitle>PRICE:</StyledTitle>
-            <StyledPrice>{this.handleCurrency(product?.prices)}</StyledPrice>
-          </StyledAttribute>
-          <StyledCartButton
-            disabled={!product?.inStock}
-            to="/cart"
-            onClick={() => {
-              handleSendToCart(product, selectedAttributes);
-            }}
-            instock={product?.inStock === true}
           >
-            {product?.inStock ? "ADD TO CART" : "OUT OF STOCK"}
-          </StyledCartButton>
-          <StyledDescription
-            dangerouslySetInnerHTML={{ __html: product?.description }}
-          />
-        </StyledActions>
+            <img
+              src={product?.gallery[selectedPhoto]}
+              alt={product?.name}
+              style={{
+                width: "31.770833333333332vw",
+                height: "54.18875927889714vh",
+                objectFit: "contain",
+                justifyContent: "center",
+                opacity: product?.inStock ? "1.0" : "0.5",
+              }}
+            />
+            <StyledStockSpan>
+              {!product?.inStock ? "OUT OF STOCK" : ""}
+            </StyledStockSpan>
+          </StyledStockDiv>
+          <StyledActions>
+            <StyledProductName product={product} />
+            <div>{renderAttributes()}</div>
+            <StyledAttribute>
+              <StyledId>PRICE:</StyledId>
+              <StyledPrice
+                productPrices={product?.prices}
+                currency={currency}
+              />
+            </StyledAttribute>
+            <StyledCartButton
+              disabled={!product?.inStock}
+              to="/cart"
+              onClick={() => {
+                handleSendToCart(product, selectedAttributes);
+              }}
+              instock={product?.inStock === true}
+            >
+              {product?.inStock ? "ADD TO CART" : "OUT OF STOCK"}
+            </StyledCartButton>
+            <StyledDescription
+              dangerouslySetInnerHTML={{ __html: product?.description }}
+            />
+          </StyledActions>
+        </StyledProduct>
       </StyledMainDiv>
     );
   }
@@ -241,7 +235,7 @@ const StyledAttribute = styled.div`
   width: 70%;
 `;
 
-const StyledTitle = styled.span`
+const StyledId = styled.span`
   font-family: "Roboto Condensed";
   font-style: normal;
   font-weight: 700;
@@ -280,16 +274,7 @@ const StyledDescription = styled.p`
   }
 `;
 
-const StyledPrice = styled.span`
-  margin-top: 10px;
-  font-family: "Raleway";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 18px;
-`;
-
-const StyledMainDiv = styled.div`
+const StyledProduct = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -306,27 +291,11 @@ const StyledItemRow = styled.div`
   flex-direction: row;
   align-items: flex-start;
 `;
-const StyledAttributes = styled.div``;
 
 const StyledActions = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-`;
-
-const StyledName = styled.p`
-  font-weight: 400;
-  font-size: 30px;
-  font-family: "Raleway";
-  text-align: justify;
-  line-height: 27px;
-`;
-
-const StyledBrand = styled.span`
-  font-weight: 600;
-  font-family: "Raleway";
-  font-size: 30px;
-  line-height: 27px;
 `;
 
 const StyledGallery = styled.div`
