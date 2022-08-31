@@ -1,7 +1,12 @@
+/* eslint-disable no-shadow */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { getItemById } from "../api/products";
+import { addItem } from "../actions/cartActions";
+import StyledTextAttribute from "../components/Styled/StyledTextAttribute";
+import StyledColorAttribute from "../components/Styled/StyledColorAttribute";
 
 class ProductPage extends Component {
   state = {
@@ -39,11 +44,9 @@ class ProductPage extends Component {
     const { selectedAttributes } = this.state;
     const attr = { ...item, attrId: attribute?.id };
     this.setState((prevState) => {
-      const foundState =
-        ("prevstate",
-        prevState?.selectedAttributes.find(
-          (selAt) => selAt?.attrId === attr?.attrId
-        ));
+      const foundState = prevState?.selectedAttributes.find(
+        (selAt) => selAt?.attrId === attr?.attrId
+      );
       if (foundState) {
         return {
           selectedAttributes: selectedAttributes
@@ -57,8 +60,14 @@ class ProductPage extends Component {
 
   render() {
     const { product, selectedPhoto, selectedAttributes } = this.state;
-    const handleSendToCart = () => {
-      return false;
+    const { addItem } = this.props;
+
+    const handleSendToCart = (productToCart, attributes) => {
+      const productItem = {
+        ...productToCart,
+        selectedAttributes: attributes,
+      };
+      addItem(productItem);
     };
     const renderAttributes = () => {
       return (
@@ -72,26 +81,26 @@ class ProductPage extends Component {
                 <StyledItemRow>
                   {attribute?.items.map((item, index) =>
                     attribute?.type === "text" ? (
-                      <StyledTextTypeItem
-                        onClick={() =>
+                      <StyledTextAttribute
+                        onClickFunc={() =>
                           this.handleSelectedAttributes(item, attribute)
                         }
                         index={index}
+                        key={index}
                         item={item}
                         attribute={attribute}
-                        selectedItem={selectedAttributes}
-                      >
-                        {item.displayValue}
-                      </StyledTextTypeItem>
+                        selectedAttributes={selectedAttributes}
+                      />
                     ) : (
-                      <StyledColorTypeItem
-                        onClick={() =>
+                      <StyledColorAttribute
+                        onClickFunc={() =>
                           this.handleSelectedAttributes(item, attribute)
                         }
                         index={index}
                         item={item}
+                        key={index}
                         attribute={attribute}
-                        selectedItem={selectedAttributes}
+                        selectedAttributes={selectedAttributes}
                         style={{ backgroundColor: item?.value }}
                       />
                     )
@@ -170,10 +179,11 @@ class ProductPage extends Component {
           </StyledAttribute>
           <StyledCartButton
             disabled={!product?.inStock}
+            to="/cart"
             onClick={() => {
-              handleSendToCart();
+              handleSendToCart(product, selectedAttributes);
             }}
-            inStock={product?.inStock}
+            instock={product?.inStock === true}
           >
             {product?.inStock ? "ADD TO CART" : "OUT OF STOCK"}
           </StyledCartButton>
@@ -186,15 +196,15 @@ class ProductPage extends Component {
   }
 }
 
-const StyledCartButton = styled.button`
+const StyledCartButton = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 292px;
   border: none;
-  background: ${({ inStock }) =>
-    inStock ? " var(--primary-green)" : "var(--light-grey)"};
-  color: ${({ inStock }) => (inStock ? " var(--white)" : "var(--grey)")};
+  background: ${({ instock }) =>
+    instock ? " var(--primary-green)" : "var(--light-grey)"};
+  color: ${({ instock }) => (instock ? " var(--white)" : "var(--grey)")};
   padding: 16px 32px;
   font-family: "Raleway";
   cursor: pointer;
@@ -202,6 +212,7 @@ const StyledCartButton = styled.button`
   font-weight: 600;
   font-size: 16px;
   line-height: 120%;
+  text-decoration: none;
 `;
 
 const StyledStockSpan = styled.span`
@@ -278,58 +289,16 @@ const StyledPrice = styled.span`
   line-height: 18px;
 `;
 
-const StyledTextTypeItem = styled.button`
-  width: 3.28125vw;
-  height: 4.7720042417815485vh;
-  background: ${({ item, selectedItem, attribute }) =>
-    selectedItem?.find(
-      (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
-    )
-      ? "var(--text-black)"
-      : "none"};
-  color: ${({ item, selectedItem, attribute }) =>
-    selectedItem?.find(
-      (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
-    )
-      ? "white"
-      : "var(--text-black)"};
-  cursor: pointer;
+const StyledMainDiv = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-  margin: ${({ index }) => (index === 0 ? "8px 6px 8px 0px" : "8px 6px")};
-  border: 1px solid var(--border-black);
-  font-family: "Source Sans Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.5vmin;
+  align-self: center;
+  margin: auto;
+  margin-top: 6.8vh;
 
-  &:hover {
-    background: var(--border-black);
-    color: white;
-  }
-`;
-
-const StyledColorTypeItem = styled.button`
-  width: 32px;
-  height: 32px;
-  border: ${({ item, selectedItem, attribute }) =>
-    selectedItem?.find(
-      (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
-    )
-      ? "2px solid var(--primary-green)"
-      : "2px solid var(--light-grey)"};
-  cursor: pointer;
-
-  display: flex;
-  padding: 1px;
-  align-items: center;
-  justify-content: center;
-  margin: ${({ index }) => (index === 0 ? "8px 6px 8px 0px" : "8px 6px")};
-
-  &:hover {
-    border: 2px solid var(--primary-green);
-  }
+  height: 80%;
+  width: 90%;
 `;
 
 const StyledItemRow = styled.div`
@@ -360,18 +329,6 @@ const StyledBrand = styled.span`
   line-height: 27px;
 `;
 
-const StyledMainDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-self: center;
-  margin: auto;
-  margin-top: 6.8vh;
-
-  height: 80%;
-  width: 90%;
-`;
-
 const StyledGallery = styled.div`
   display: flex;
   flex-direction: column;
@@ -399,8 +356,8 @@ const StyledGallery = styled.div`
 `;
 
 function mapStateToProps(state) {
-  const { currency } = state;
-  return { currency };
+  const { currency, cart } = state;
+  return { currency, cart };
 }
 
-export default connect(mapStateToProps, null)(ProductPage);
+export default connect(mapStateToProps, { addItem })(ProductPage);

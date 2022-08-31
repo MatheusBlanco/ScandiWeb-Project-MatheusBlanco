@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
 import { getAllItems } from "../api/products";
 import ProductCard from "../components/ProductCard";
+import StyledTitle from "../components/Styled/StyledTitle";
 
 class CategoryPage extends Component {
   state = {
@@ -29,7 +29,12 @@ class CategoryPage extends Component {
           paddingBottom: "5vw",
         }}
       >
-        <StyledCategory>Category {allItems?.category?.name}</StyledCategory>
+        <StyledTitle
+          weight={400}
+          child={`
+          Category ${allItems?.category?.name}
+        `}
+        />
         <div
           style={{
             display: "flex",
@@ -47,26 +52,6 @@ class CategoryPage extends Component {
     );
   }
 }
-
-const StyledCategory = styled.p`
-  width: 299px;
-  height: 68px;
-  left: calc(50% - 15.57vw / 2 - 24.42px);
-  top: calc(50% - 6.8vh / 2 - 56.25vh);
-
-  /* Heading / Desktop / H2 */
-
-  font-family: "Raleway";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 4.45vh;
-  line-height: 160%;
-
-  display: flex;
-  align-items: center;
-
-  color: var(--text-black);
-`;
 
 function mapStateToProps(state) {
   const { currency } = state;

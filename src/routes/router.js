@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import CategoryPage from "../screens/CategoryPage";
 import TopBar from "../components/TopBar";
 import ProductPage from "../screens/ProductPage";
+import CartPage from "../screens/CartPage";
 
 class Router extends Component {
   render() {
@@ -14,6 +15,7 @@ class Router extends Component {
         <Routes>
           <Route path="/" element={<CategoryPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
       </>
     );

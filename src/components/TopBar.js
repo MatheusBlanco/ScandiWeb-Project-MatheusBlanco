@@ -34,7 +34,7 @@ class TopBar extends Component {
 
   render() {
     const { currencies, currencyOption } = this.state;
-    const { setCurrency } = this.props;
+    const { setCurrency, cart } = this.props;
     return (
       <StyledTopBar>
         <div style={{ maxWidth: "12,2vw" }}>
@@ -60,12 +60,42 @@ class TopBar extends Component {
               setCurrency(e);
             }}
           />
-          <img style={{ marginLeft: 10 }} src={EmptyCart} alt="" />
+          <StyledCart type="button">
+            <img style={{ marginLeft: 10 }} src={EmptyCart} alt="" />
+            {cart?.items?.length > 0 ? (
+              <StyledCartAmmount>{cart?.items?.length}</StyledCartAmmount>
+            ) : null}
+          </StyledCart>
         </StyledActions>
       </StyledTopBar>
     );
   }
 }
+
+const StyledCart = styled.button`
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const StyledCartAmmount = styled.div`
+  height: 20px;
+  width: 20px;
+  background-color: var(--border-black);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 20px;
+  font-family: Roboto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: -6px;
+  left: 28px;
+`;
 
 const StyledLogo = styled.img`
   margin-right: 7vw;
@@ -92,8 +122,8 @@ const StyledTopBar = styled.nav`
 `;
 
 function mapStateToProps(state) {
-  const { currency } = state;
-  return { currency };
+  const { currency, cart } = state;
+  return { currency, cart };
 }
 
 export default connect(mapStateToProps, { setCurrency })(TopBar);
