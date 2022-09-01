@@ -12,13 +12,13 @@ class StyledImageCart extends Component {
     const { selectedPhoto } = this.state;
 
     return (
-      <div>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <img
           style={{
             width: "12.416666666666666vw",
             height: "30.54082714740191vh",
             objectFit: "contain",
-            justifyContent: "center",
+            margin: "auto",
           }}
           src={item?.gallery[selectedPhoto]}
           alt=""
@@ -64,7 +64,7 @@ const StyledButtonsImage = styled.div`
   width: 35%;
   justify-content: space-around;
   position: relative;
-  top: -12%;
+  top: -36px;
   left: 64%;
 `;
 

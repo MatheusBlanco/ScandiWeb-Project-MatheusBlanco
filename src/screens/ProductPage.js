@@ -54,7 +54,6 @@ class ProductPage extends Component {
     const handleSendToCart = (productToCart, attributes) => {
       const productItem = {
         ...productToCart,
-        amount: 1,
         selectedAttributes: attributes,
       };
       addItem(productItem);

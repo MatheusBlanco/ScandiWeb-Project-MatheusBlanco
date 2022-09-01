@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-plusplus */
 /* eslint-disable no-unsafe-optional-chaining */
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -11,13 +13,61 @@ import StyledTitle from "../components/Styled/StyledTitle";
 import StyledImageCart from "../components/Styled/StyledImageCart";
 import Plus from "../assets/icons/Plus.svg";
 import Minus from "../assets/icons/Minus.svg";
+import { arraysEqual } from "../helpers/index";
+import { addItem } from "../actions/cartActions";
 
 class CartPage extends Component {
-  render() {
-    const { cart, currency } = this.props;
+  state = {
+    reducedProductArray: [],
+  };
 
-    const handleItemAmount = (item) => {
-      console.log(item);
+  componentDidMount() {
+    this.handleArrayWithAmounts();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { cart } = this.props;
+    if (cart?.items !== prevProps.cart?.items) {
+      this.handleArrayWithAmounts();
+    }
+  }
+
+  handleArrayWithAmounts = () => {
+    const { cart } = this.props;
+    let result = [];
+
+    cart?.items.forEach((item) => {
+      const resultItemIndex = result.findIndex(
+        (resultItem) =>
+          resultItem?.id === item?.id &&
+          arraysEqual(resultItem?.selectedAttributes, item?.selectedAttributes)
+      );
+      const itemExistsOnResult = resultItemIndex !== -1;
+
+      if (itemExistsOnResult) {
+        let resultItem = result[resultItemIndex];
+
+        resultItem = { ...resultItem, amount: resultItem.amount + 1 };
+
+        const tempRes = result;
+        tempRes[resultItemIndex] = resultItem;
+        result = tempRes;
+      } else {
+        result.push({ ...item, amount: 1 });
+      }
+    });
+    this.setState({ reducedProductArray: result });
+  };
+
+  render() {
+    const { cart, currency, addItem } = this.props;
+    const { reducedProductArray } = this.state;
+
+    const handleItemAmount = (item, cloneItem) => {
+      if (cloneItem) {
+        const newItem = item;
+        addItem(newItem);
+      }
     };
 
     const renderAttributes = (item) => {
@@ -67,12 +117,15 @@ class CartPage extends Component {
         <StyledAmountHandle>
           <StyledAmountButton
             type="button"
-            onClick={() => handleItemAmount(item)}
+            onClick={() => handleItemAmount(item, true)}
           >
             <img src={Plus} alt="plus" />
           </StyledAmountButton>
-          <StyledAmount>{item?.amount}</StyledAmount>
-          <StyledAmountButton type="button">
+          <StyledAmount>{item?.amount ? item?.amount : 1}</StyledAmount>
+          <StyledAmountButton
+            type="button"
+            onClick={() => handleItemAmount(item, false)}
+          >
             <img src={Minus} alt="plus" />
           </StyledAmountButton>
         </StyledAmountHandle>
@@ -84,11 +137,12 @@ class CartPage extends Component {
         <StyledTitle weight="bold" child="Cart" />
         {cart?.items.length ? (
           <StyledScrollingItems>
-            {cart?.items?.map((item, index) => {
+            {reducedProductArray?.map((item, index) => {
               return (
                 <>
                   <StyledSeparator index={index} />
                   <div
+                    key={index}
                     style={{
                       display: "flex",
                       flexDirection: "row",
@@ -136,8 +190,10 @@ const StyledAmountButton = styled.button`
 const StyledAmountHandle = styled.div`
   display: flex;
   height: 100%;
+  max-height: 30.54082714740191vh;
   flex-direction: column;
   justify-content: space-between;
+  margin-right: 10px;
 `;
 
 const StyledAmount = styled.p`
@@ -153,7 +209,7 @@ const StyledCartImageAndAmount = styled.div`
   flex-direction: row;
   width: 100%;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const StyledScrollingItems = styled.div`
@@ -222,4 +278,4 @@ function mapStateToProps(state) {
   return { currency, cart };
 }
 
-export default connect(mapStateToProps, null)(CartPage);
+export default connect(mapStateToProps, { addItem })(CartPage);
