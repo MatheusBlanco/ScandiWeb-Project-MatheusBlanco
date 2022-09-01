@@ -171,10 +171,11 @@ class ProductPage extends Component {
               />
             </StyledAttribute>
             <StyledCartButton
-              disabled={!product?.inStock}
-              to="/cart"
+              to={product?.inStock ? "/cart" : `/product/${product?.id}`}
               onClick={() => {
-                handleSendToCart(product, selectedAttributes);
+                if (product?.inStock) {
+                  handleSendToCart(product, selectedAttributes);
+                }
               }}
               instock={`${product?.inStock}`}
             >
@@ -196,8 +197,9 @@ const StyledCartButton = styled(Link)`
   align-items: center;
   width: 292px;
   border: none;
-  background: ${({ instock }) =>
-    instock ? " var(--primary-green)" : "var(--light-grey)"};
+  background: ${({ instock }) => {
+    return instock === "true" ? " var(--primary-green)" : "var(--light-grey)";
+  }};
   color: ${({ instock }) => (instock ? " var(--white)" : "var(--grey)")};
   padding: 16px 32px;
   font-family: "Raleway";

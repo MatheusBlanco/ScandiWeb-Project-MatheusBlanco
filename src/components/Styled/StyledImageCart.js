@@ -8,15 +8,15 @@ class StyledImageCart extends Component {
   state = { selectedPhoto: 0 };
 
   render() {
-    const { item } = this.props;
+    const { item, popUp } = this.props;
     const { selectedPhoto } = this.state;
 
     return (
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
           style={{
-            width: "12.416666666666666vw",
-            height: "30.54082714740191vh",
+            width: popUp ? "6vw" : "6.302083333333333vw",
+            height: popUp ? "15vh" : "20.14846235418876vh",
             objectFit: "contain",
             margin: "auto",
           }}

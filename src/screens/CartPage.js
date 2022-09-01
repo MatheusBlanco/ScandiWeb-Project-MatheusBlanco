@@ -4,17 +4,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import StyledColorAttribute from "../components/Styled/StyledColorAttribute";
 import StyledMainDiv from "../components/Styled/StyledMainDiv";
-import StyledPrice from "../components/Styled/StyledPrice";
-import StyledProductName from "../components/Styled/StyledProductName";
-import StyledTextAttribute from "../components/Styled/StyledTextAttribute";
 import StyledTitle from "../components/Styled/StyledTitle";
-import StyledImageCart from "../components/Styled/StyledImageCart";
-import Plus from "../assets/icons/Plus.svg";
-import Minus from "../assets/icons/Minus.svg";
 import { arraysEqual } from "../helpers/index";
 import { addItem, removeItemAmount } from "../actions/cartActions";
+import CartItems from "../components/CartItems";
 
 class CartPage extends Component {
   state = {
@@ -62,79 +56,8 @@ class CartPage extends Component {
   };
 
   render() {
-    const { cart, currency, addItem, removeItemAmount } = this.props;
+    const { cart, currency } = this.props;
     const { reducedProductArray } = this.state;
-
-    const handleItemAmount = (item, cloneItem) => {
-      if (cloneItem) {
-        const newItem = item;
-        addItem(newItem);
-      } else {
-        removeItemAmount(item, cart?.items);
-      }
-    };
-
-    const renderAttributes = (item) => {
-      return (
-        <div>
-          {item?.selectedAttributes.length
-            ? item?.attributes?.map((attribute) => {
-                return (
-                  <StyledAttribute key={attribute?.id}>
-                    <StyledId className="roboto">
-                      {attribute?.id.toUpperCase()}:
-                    </StyledId>
-                    <StyledItemRow>
-                      {attribute?.items.map((attributeitem, index) =>
-                        attribute?.type === "text" ? (
-                          <StyledTextAttribute
-                            index={index}
-                            key={index}
-                            item={attributeitem}
-                            attribute={attribute}
-                            noHover
-                            selectedAttributes={item?.selectedAttributes}
-                          />
-                        ) : (
-                          <StyledColorAttribute
-                            index={index}
-                            item={attributeitem}
-                            key={index}
-                            attribute={attribute}
-                            noHover
-                            selectedAttributes={item?.selectedAttributes}
-                            style={{ backgroundColor: item?.value }}
-                          />
-                        )
-                      )}
-                    </StyledItemRow>
-                  </StyledAttribute>
-                );
-              })
-            : null}
-        </div>
-      );
-    };
-
-    const renderAmount = (item) => {
-      return (
-        <StyledAmountHandle>
-          <StyledAmountButton
-            type="button"
-            onClick={() => handleItemAmount(item, true)}
-          >
-            <img src={Plus} alt="plus" />
-          </StyledAmountButton>
-          <StyledAmount>{item?.amount ? item?.amount : 1}</StyledAmount>
-          <StyledAmountButton
-            type="button"
-            onClick={() => handleItemAmount(item, false)}
-          >
-            <img src={Minus} alt="plus" />
-          </StyledAmountButton>
-        </StyledAmountHandle>
-      );
-    };
 
     const totalPrice = () => {
       const pricesArray = cart?.items.map((products) => {
@@ -186,48 +109,13 @@ class CartPage extends Component {
       <StyledMainDiv>
         <StyledTitle weight="bold" child="Cart" />
         {cart?.items?.length ? (
-          <>
-            <StyledScrollingItems>
-              <StyledSeparator index={0} />
-
-              {reducedProductArray?.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        width: "99.5%",
-                      }}
-                    >
-                      <StyledCartItems>
-                        <StyledProductName product={item} />
-                        <div style={{ marginBottom: 20 }}>
-                          <StyledPrice
-                            productPrices={item?.prices}
-                            currency={currency}
-                          />
-                        </div>
-                        <div>{renderAttributes(item)}</div>
-                      </StyledCartItems>
-                      <StyledCartImageAndAmount>
-                        {renderAmount(item)}
-                        <StyledImageCart item={item} />
-                      </StyledCartImageAndAmount>
-                    </div>
-                    <StyledSeparator
-                      index={index + 1}
-                      length={reducedProductArray?.length}
-                    />
-                  </div>
-                );
-              })}
-            </StyledScrollingItems>
-            <StyledCheckout>{renderCheckout()}</StyledCheckout>
-          </>
+          <CartItems />
         ) : (
           <StyledTitle weight="400" child="Your cart is Empty" />
         )}
+        {cart?.items?.length ? (
+          <StyledCheckout>{renderCheckout()}</StyledCheckout>
+        ) : null}
       </StyledMainDiv>
     );
   }
@@ -287,38 +175,6 @@ const StyledAmount = styled.p`
   line-height: 160%;
 `;
 
-const StyledCartImageAndAmount = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: flex-end;
-  align-items: flex-start;
-`;
-
-const StyledScrollingItems = styled.div`
-  margin-top: 2.4vh;
-  max-height: 47vh;
-
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  ::-webkit-scrollbar {
-    width: 3px;
-    margin-left: 5px;
-  }
-  /* Track */
-  ::-webkit-scrollbar-track {
-    border-radius: 10px;
-    width: 4px;
-    background: none;
-  }
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: var(--primary-green);
-    width: 2px;
-  }
-`;
-
 const StyledId = styled.span`
   font-family: "Roboto Condensed";
   font-style: normal;
@@ -340,20 +196,6 @@ const StyledAttribute = styled.div`
   align-items: flex-start;
   margin-bottom: 24px;
   width: 70%;
-`;
-
-const StyledSeparator = styled.div`
-  height: 1px;
-  background: var(--light-grey);
-  margin-bottom: ${({ index, length }) => (index === length ? "0vh" : "2.4vh")};
-  margin-top: ${({ index }) => (index === 0 ? "0vh" : "2.4vh")};
-`;
-
-const StyledCartItems = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: flex-start;
 `;
 
 const StyledTaxAndAmmount = styled.span`

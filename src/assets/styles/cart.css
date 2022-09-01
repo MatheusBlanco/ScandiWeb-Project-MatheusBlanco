@@ -1,0 +1,10 @@
+.view-cart {
+  color: var(--border-black);
+  text-decoration: none;
+  padding-bottom: 1.378579003181336vh;
+  padding-right: 1.875vw;
+  padding-left: 1.875vw;
+  padding-top: 1.378579003181336vh;
+  font-family: "Raleway";
+  border: 1px solid var(--border-black);
+}

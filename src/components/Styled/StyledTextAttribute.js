@@ -3,27 +3,35 @@ import styled from "styled-components";
 
 class StyledTextAttribute extends Component {
   render() {
-    const { selectedAttributes, attribute, index, item, onClickFunc, noHover } =
-      this.props;
+    const {
+      selectedAttributes,
+      attribute,
+      index,
+      item,
+      onClickFunc,
+      noHover,
+      popUp,
+    } = this.props;
     return (
       <StyledTextTypeItem
         onClick={onClickFunc}
         index={index}
         noHover={noHover}
+        popUp={popUp}
         key={index}
         item={item}
         attribute={attribute}
         selectedItem={selectedAttributes}
       >
-        {item.displayValue}
+        {popUp ? item.displayValue.slice(0, 3) : item?.displayValue}
       </StyledTextTypeItem>
     );
   }
 }
 
 const StyledTextTypeItem = styled.button`
-  width: 3.28125vw;
-  height: 4.7720042417815485vh;
+  width: ${({ popUp }) => (popUp ? "24px" : "3.28125vw")};
+  height: ${({ popUp }) => (popUp ? "24px" : "4.7720042417815485vh")};
   background: ${({ item, selectedItem, attribute }) =>
     selectedItem?.find(
       (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
@@ -45,7 +53,7 @@ const StyledTextTypeItem = styled.button`
   font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 400;
-  font-size: 1.5vmin;
+  font-size: ${({ popUp }) => (popUp ? "10px" : "1.5vmin")};
 
   &:hover {
     background: ${({ noHover }) => (noHover ? "none" : "var(--border-black)")};

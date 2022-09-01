@@ -73,15 +73,7 @@ class TopBar extends Component {
             }}
           />
           <StyledCart type="button">
-            <CartPopUp
-              defaultPlaceholder={currencyOption || "$"}
-              options={currencies}
-              child={cartIcon()}
-              onOptionClick={(e) => {
-                this.setState({ currencyOption: e });
-                setCurrency(e);
-              }}
-            />
+            <CartPopUp child={cartIcon()} />
           </StyledCart>
         </StyledActions>
       </StyledTopBar>

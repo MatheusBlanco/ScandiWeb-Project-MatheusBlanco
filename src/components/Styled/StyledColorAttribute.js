@@ -3,13 +3,21 @@ import styled from "styled-components";
 
 class StyledColorAttribute extends Component {
   render() {
-    const { selectedAttributes, attribute, index, item, onClickFunc, noHover } =
-      this.props;
+    const {
+      selectedAttributes,
+      attribute,
+      index,
+      item,
+      onClickFunc,
+      noHover,
+      popUp,
+    } = this.props;
     return (
       <StyledColorTypeItem
         onClick={onClickFunc}
         index={index}
         key={index}
+        popUp={popUp}
         noHover={noHover}
         item={item}
         attribute={attribute}
@@ -21,8 +29,8 @@ class StyledColorAttribute extends Component {
 }
 
 const StyledColorTypeItem = styled.button`
-  width: 32px;
-  height: 32px;
+  width: ${({ popUp }) => (popUp ? "20px" : "32px")};
+  height: ${({ popUp }) => (popUp ? "20px" : "32px")};
   border: ${({ item, selectedItem, attribute }) =>
     selectedItem?.find(
       (selI) => selI?.id === item?.id && selI?.attrId === attribute.id
