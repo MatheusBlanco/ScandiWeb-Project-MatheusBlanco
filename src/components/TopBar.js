@@ -9,6 +9,7 @@ import "../assets/styles/topbar.css";
 import Select from "./Select";
 import getCurrency from "../api/currency";
 import { setCurrency } from "../actions/currencyActions";
+import CartPopUp from "./CartPopUp";
 
 class TopBar extends Component {
   menu = [
@@ -35,9 +36,20 @@ class TopBar extends Component {
   render() {
     const { currencies, currencyOption } = this.state;
     const { setCurrency, cart } = this.props;
+
+    const cartIcon = () => {
+      return (
+        <>
+          <img style={{ marginLeft: 10 }} src={EmptyCart} alt="" />
+          {cart?.items?.length > 0 ? (
+            <StyledCartAmount>{cart?.items?.length}</StyledCartAmount>
+          ) : null}
+        </>
+      );
+    };
     return (
       <StyledTopBar>
-        <div style={{ maxWidth: "12,2vw" }}>
+        <div style={{ maxWidth: "12,2vw", marginRight: 425 }}>
           {this.menu?.map((item, index) => {
             return (
               <NavLink
@@ -61,10 +73,15 @@ class TopBar extends Component {
             }}
           />
           <StyledCart type="button">
-            <img style={{ marginLeft: 10 }} src={EmptyCart} alt="" />
-            {cart?.items?.length > 0 ? (
-              <StyledCartAmount>{cart?.items?.length}</StyledCartAmount>
-            ) : null}
+            <CartPopUp
+              defaultPlaceholder={currencyOption || "$"}
+              options={currencies}
+              child={cartIcon()}
+              onOptionClick={(e) => {
+                this.setState({ currencyOption: e });
+                setCurrency(e);
+              }}
+            />
           </StyledCart>
         </StyledActions>
       </StyledTopBar>
@@ -93,8 +110,8 @@ const StyledCartAmount = styled.div`
   justify-content: center;
 
   position: absolute;
-  top: -6px;
-  left: 28px;
+  top: -3px;
+  left: 33px;
 `;
 
 const StyledLogo = styled.img`
@@ -107,18 +124,18 @@ const StyledActions = styled.div`
   width: 102px;
   max-width: 102px;
   justify-content: space-evenly;
+  margin-left: 425px;
 `;
 
 const StyledTopBar = styled.nav`
   position: fixed;
-  width: 90%;
+  width: 100%;
   top: 0;
-  left: 5%;
   background-color: white;
   height: 8.5vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   z-index: 1;
 `;
 

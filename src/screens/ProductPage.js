@@ -176,7 +176,7 @@ class ProductPage extends Component {
               onClick={() => {
                 handleSendToCart(product, selectedAttributes);
               }}
-              instock={product?.inStock === true}
+              instock={`${product?.inStock}`}
             >
               {product?.inStock ? "ADD TO CART" : "OUT OF STOCK"}
             </StyledCartButton>

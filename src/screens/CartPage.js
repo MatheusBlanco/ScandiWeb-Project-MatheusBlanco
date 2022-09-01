@@ -192,9 +192,8 @@ class CartPage extends Component {
 
               {reducedProductArray?.map((item, index) => {
                 return (
-                  <>
+                  <div key={index}>
                     <div
-                      key={index}
                       style={{
                         display: "flex",
                         flexDirection: "row",
@@ -220,7 +219,7 @@ class CartPage extends Component {
                       index={index + 1}
                       length={reducedProductArray?.length}
                     />
-                  </>
+                  </div>
                 );
               })}
             </StyledScrollingItems>
@@ -298,7 +297,7 @@ const StyledCartImageAndAmount = styled.div`
 
 const StyledScrollingItems = styled.div`
   margin-top: 2.4vh;
-  max-height: 55.38494167550371vh;
+  max-height: 47vh;
 
   overflow-y: auto;
   overflow-x: hidden;
