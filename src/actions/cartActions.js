@@ -13,3 +13,12 @@ export const removeItem = (obj) => {
   };
   return res;
 };
+
+export const removeItemAmount = (obj, fullArray) => {
+  const res = {
+    type: "REMOVE_ITEM_AMOUNT",
+    payload: obj,
+    fullArray,
+  };
+  return res;
+};

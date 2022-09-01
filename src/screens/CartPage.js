@@ -14,7 +14,7 @@ import StyledImageCart from "../components/Styled/StyledImageCart";
 import Plus from "../assets/icons/Plus.svg";
 import Minus from "../assets/icons/Minus.svg";
 import { arraysEqual } from "../helpers/index";
-import { addItem } from "../actions/cartActions";
+import { addItem, removeItemAmount } from "../actions/cartActions";
 
 class CartPage extends Component {
   state = {
@@ -36,7 +36,7 @@ class CartPage extends Component {
     const { cart } = this.props;
     let result = [];
 
-    cart?.items.forEach((item) => {
+    cart?.items?.forEach((item) => {
       const resultItemIndex = result.findIndex(
         (resultItem) =>
           resultItem?.id === item?.id &&
@@ -56,17 +56,21 @@ class CartPage extends Component {
         result.push({ ...item, amount: 1 });
       }
     });
-    this.setState({ reducedProductArray: result });
+    this.setState({
+      reducedProductArray: result.sort((a, b) => a.id.localeCompare(b.id)),
+    });
   };
 
   render() {
-    const { cart, currency, addItem } = this.props;
+    const { cart, currency, addItem, removeItemAmount } = this.props;
     const { reducedProductArray } = this.state;
 
     const handleItemAmount = (item, cloneItem) => {
       if (cloneItem) {
         const newItem = item;
         addItem(newItem);
+      } else {
+        removeItemAmount(item, cart?.items);
       }
     };
 
@@ -135,7 +139,7 @@ class CartPage extends Component {
     return (
       <StyledMainDiv>
         <StyledTitle weight="bold" child="Cart" />
-        {cart?.items.length ? (
+        {cart?.items?.length ? (
           <StyledScrollingItems>
             {reducedProductArray?.map((item, index) => {
               return (
@@ -278,4 +282,6 @@ function mapStateToProps(state) {
   return { currency, cart };
 }
 
-export default connect(mapStateToProps, { addItem })(CartPage);
+export default connect(mapStateToProps, { addItem, removeItemAmount })(
+  CartPage
+);

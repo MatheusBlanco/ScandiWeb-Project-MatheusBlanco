@@ -55,6 +55,7 @@ class ProductPage extends Component {
       const productItem = {
         ...productToCart,
         selectedAttributes: attributes,
+        productId: productToCart.id + selectedAttributes.map((attr) => attr.id),
       };
       addItem(productItem);
     };
