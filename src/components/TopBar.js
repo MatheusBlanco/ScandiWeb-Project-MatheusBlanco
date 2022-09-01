@@ -72,7 +72,7 @@ class TopBar extends Component {
               setCurrency(e);
             }}
           />
-          <StyledCart type="button">
+          <StyledCart>
             <CartPopUp child={cartIcon()} />
           </StyledCart>
         </StyledActions>
@@ -81,7 +81,7 @@ class TopBar extends Component {
   }
 }
 
-const StyledCart = styled.button`
+const StyledCart = styled.div`
   position: relative;
   background: none;
   border: none;
@@ -102,8 +102,8 @@ const StyledCartAmount = styled.div`
   justify-content: center;
 
   position: absolute;
-  top: -3px;
-  left: 33px;
+  top: -4px;
+  left: 25px;
 `;
 
 const StyledLogo = styled.img`

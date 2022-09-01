@@ -1,14 +1,17 @@
 const popUpReducer = (state = false, action) => {
+  console.log(state, action);
   switch (action.type) {
     case "SET_ISOPEN":
-      console.log("open");
+      console.log("open no reducer");
       return {
+        ...state,
         value: true,
       };
     case "SET_ISCLOSED":
-      console.log("close");
+      console.log("close no reducer");
 
       return {
+        ...state,
         value: false,
       };
     default:

@@ -25,8 +25,8 @@ class CartPopUp extends Component {
   handleClickOutside = (event) => {
     const { setIsClosed } = this.props;
     if (this.divRef.current && !this.divRef.current.contains(event.target)) {
-      this.setState({ isOpen: false });
       setIsClosed();
+      this.setState({ isOpen: false });
     }
   };
 
@@ -50,8 +50,10 @@ class CartPopUp extends Component {
       cart,
       setIsClosed,
       setIsOpen,
+      popUpReducer,
     } = this.props;
     const { isOpen } = this.state;
+    console.log(popUpReducer);
 
     const totalPrice = () => {
       const pricesArray = cart?.items.map((products) => {
@@ -104,11 +106,11 @@ class CartPopUp extends Component {
             type="button"
             onClick={() => {
               if (isOpen === true) {
+                setIsClosed(true);
                 this.setState({ isOpen: false });
-                setIsClosed();
               } else {
+                setIsOpen(false);
                 this.setState({ isOpen: true });
-                setIsOpen();
               }
             }}
           >
@@ -128,12 +130,6 @@ class CartPopUp extends Component {
     );
   }
 }
-const StyledBackground = styled.div`
-  background: rgba(57, 55, 72, 0.22);
-  opacity: 0.8;
-  height: 100vh;
-  overflow-x: hidden;
-`;
 
 const StyledOrder = styled.button`
   color: white;
