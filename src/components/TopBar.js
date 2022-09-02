@@ -10,32 +10,37 @@ import Select from "./Select";
 import getCurrency from "../api/currency";
 import { setCurrency } from "../actions/currencyActions";
 import CartPopUp from "./CartPopUp";
+import { getCategories } from "../api/category";
+import { setNewRoute } from "../actions/categoryAction";
 
 class TopBar extends Component {
-  menu = [
-    { label: "WOMEN", redirectTo: "/" },
-    { label: "MEN", redirectTo: "/men" },
-    { label: "KIDS", redirectTo: "/kids" },
-  ];
-
   state = {
     currencies: [],
     currencyOption: "$",
+    categoriesState: [],
   };
 
   componentDidMount() {
-    this.handlecurrencies();
+    const { setNewRoute } = this.props;
+    this.handleData();
+    setNewRoute("all");
+    if (window.location.pathname === "/" || window.location.pathname === "") {
+      window.location.href = "/all";
+    }
   }
 
-  handlecurrencies = () => {
+  handleData = () => {
     getCurrency().then((res) => {
       this.setState({ currencies: res });
+    });
+    getCategories().then((res) => {
+      this.setState({ categoriesState: res.categories });
     });
   };
 
   render() {
-    const { currencies, currencyOption } = this.state;
-    const { setCurrency, cart } = this.props;
+    const { currencies, currencyOption, categoriesState } = this.state;
+    const { setCurrency, cart, setNewRoute } = this.props;
 
     const cartIcon = () => {
       return (
@@ -50,14 +55,17 @@ class TopBar extends Component {
     return (
       <StyledTopBar>
         <div style={{ maxWidth: "12,2vw", marginRight: 425 }}>
-          {this.menu?.map((item, index) => {
+          {categoriesState?.map((item, index) => {
             return (
               <NavLink
                 key={index}
-                to={item.redirectTo}
+                to={`/${item.name}`}
+                onClick={() => {
+                  setNewRoute(item?.name);
+                }}
                 className={({ isActive }) => (isActive ? "active" : "inactive")}
               >
-                {item.label}
+                {item.name}
               </NavLink>
             );
           })}
@@ -132,8 +140,8 @@ const StyledTopBar = styled.nav`
 `;
 
 function mapStateToProps(state) {
-  const { currency, cart } = state;
-  return { currency, cart };
+  const { currency, cart, category } = state;
+  return { currency, cart, category };
 }
 
-export default connect(mapStateToProps, { setCurrency })(TopBar);
+export default connect(mapStateToProps, { setCurrency, setNewRoute })(TopBar);

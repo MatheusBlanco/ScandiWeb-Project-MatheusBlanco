@@ -14,20 +14,41 @@ class CategoryPage extends Component {
     this.handleAllItems();
   }
 
+  componentDidUpdate(prevProps) {
+    const { category } = this.props;
+    if (prevProps?.category?.value !== category?.value) {
+      this.handleAllItems();
+    }
+  }
+
   handleAllItems = () => {
+    const { category } = this.props;
     getAllItems()
-      .then((res) => this.setState({ allItems: res }))
+      .then((res) => {
+        if (category?.value !== "all") {
+          this.setState({
+            allItems: res?.category?.products.filter(
+              (ctgr) => ctgr?.category === category.value
+            ),
+          });
+        } else {
+          this.setState({
+            allItems: res?.category?.products,
+          });
+        }
+      })
       .catch((e) => alert("There was a problem getting the products", e));
   };
 
   render() {
     const { allItems } = this.state;
+    const { category } = this.props;
     return (
       <StyledMainDiv>
         <StyledTitle
           weight={400}
           child={`
-          Category ${allItems?.category?.name}
+          Category ${category?.value}
         `}
         />
         <div
@@ -38,8 +59,8 @@ class CategoryPage extends Component {
             flexWrap: "wrap",
           }}
         >
-          {allItems?.category?.products?.length &&
-            allItems?.category?.products.map((product, index) => {
+          {allItems?.length &&
+            allItems?.map((product, index) => {
               return <ProductCard key={index} product={product} />;
             })}
         </div>
@@ -49,8 +70,8 @@ class CategoryPage extends Component {
 }
 
 function mapStateToProps(state) {
-  const { currency } = state;
-  return { currency };
+  const { currency, category } = state;
+  return { currency, category };
 }
 
 export default connect(mapStateToProps, null)(CategoryPage);

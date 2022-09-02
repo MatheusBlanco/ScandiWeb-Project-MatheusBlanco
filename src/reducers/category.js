@@ -1,8 +1,7 @@
-const popUpReducer = (state = false, action) => {
+const category = (state = "all", action) => {
   switch (action.type) {
-    case "OPEN_CLOSE":
+    case `NEW_ROUTE`:
       return {
-        ...state,
         value: action.payload,
       };
     default:
@@ -10,4 +9,4 @@ const popUpReducer = (state = false, action) => {
   }
 };
 
-export default popUpReducer;
+export default category;

@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import CartItems from "./CartItems";
 import "../assets/styles/cart.css";
-import { setIsClosed, setIsOpen } from "../actions/popUpAction";
+import { openClose } from "../actions/popUpAction";
 
 class CartPopUp extends Component {
   divRef = React.createRef();
@@ -23,9 +23,7 @@ class CartPopUp extends Component {
   }
 
   handleClickOutside = (event) => {
-    const { setIsClosed } = this.props;
     if (this.divRef.current && !this.divRef.current.contains(event.target)) {
-      setIsClosed();
       this.setState({ isOpen: false });
     }
   };
@@ -42,18 +40,8 @@ class CartPopUp extends Component {
   };
 
   render() {
-    const {
-      selectStyle,
-      width,
-      child,
-      currency,
-      cart,
-      setIsClosed,
-      setIsOpen,
-      popUpReducer,
-    } = this.props;
+    const { selectStyle, width, child, currency, cart, openClose } = this.props;
     const { isOpen } = this.state;
-    console.log(popUpReducer);
 
     const totalPrice = () => {
       const pricesArray = cart?.items.map((products) => {
@@ -89,7 +77,6 @@ class CartPopUp extends Component {
               className="view-cart"
               onClick={() => {
                 this.setState({ isOpen: false });
-                setIsOpen();
               }}
             >
               VIEW BAG
@@ -105,13 +92,8 @@ class CartPopUp extends Component {
           <StyledSelect
             type="button"
             onClick={() => {
-              if (isOpen === true) {
-                setIsClosed(true);
-                this.setState({ isOpen: false });
-              } else {
-                setIsOpen(false);
-                this.setState({ isOpen: true });
-              }
+              openClose(!isOpen);
+              this.setState({ isOpen: !isOpen });
             }}
           >
             {child}
@@ -220,4 +202,4 @@ function mapStateToProps(state) {
   const { currency, cart, popUpReducer } = state;
   return { currency, cart, popUpReducer };
 }
-export default connect(mapStateToProps, { setIsClosed, setIsOpen })(CartPopUp);
+export default connect(mapStateToProps, { openClose })(CartPopUp);

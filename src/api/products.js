@@ -44,7 +44,7 @@ function getItemById(id) {
     });
 }
 
-function getAllItems() {
+function getAllItems(category) {
   const query = `
     {
       category {
@@ -84,7 +84,7 @@ function getAllItems() {
       query,
     })
     .then((res) => {
-      return res.data.data;
+      return res?.data?.data;
     })
     .catch((err) => {
       console.warn(err);

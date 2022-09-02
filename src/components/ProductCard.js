@@ -19,9 +19,9 @@ class ProductCard extends Component {
   };
 
   render() {
-    const { product } = this.props;
+    const { product, category } = this.props;
     return (
-      <StyledCard to={`/product/${product?.id}`}>
+      <StyledCard to={`/${category?.value}/product/${product?.id}`}>
         <StyledStockDiv stock={product?.inStock}>
           <img
             src={product.gallery[0]}
@@ -111,8 +111,8 @@ const StyledPrice = styled.span`
 `;
 
 function mapStateToProps(state) {
-  const { currency } = state;
-  return { currency };
+  const { currency, category } = state;
+  return { currency, category };
 }
 
 export default connect(mapStateToProps, null)(ProductCard);

@@ -6,7 +6,7 @@ function StyledTitle({ child, weight }) {
 }
 
 const Styledp = styled.span`
-  width: 299px;
+  width: 350px;
   height: 68px;
   margin-top: 3vh;
   left: calc(50% - 15.57vw / 2 - 24.42px);

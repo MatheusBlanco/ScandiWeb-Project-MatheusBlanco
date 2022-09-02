@@ -9,25 +9,32 @@ import CartPage from "../screens/CartPage";
 
 class Router extends Component {
   render() {
-    console.log(this.props);
+    const { popUpReducer } = this.props;
+    const routes = () => {
+      return (
+        <Routes>
+          <Route path="/:category" element={<CategoryPage />} />
+          <Route path="/:category/product/:id" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
+      );
+    };
     return (
       <>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <TopBar />
         </div>
-        <Routes>
-          <Route path="/" element={<CategoryPage />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/cart" element={<CartPage />} />
-        </Routes>
+        <StyledBackground popUpReducer={popUpReducer?.value}>
+          {routes()}
+        </StyledBackground>
       </>
     );
   }
 }
 
 const StyledBackground = styled.div`
-  background: rgba(57, 55, 72, 0.22);
-  opacity: 0.8;
+  background: ${({ popUpReducer }) =>
+    popUpReducer ? "#39374838" : "transparent"};
   height: 100vh;
   overflow-x: hidden;
 `;

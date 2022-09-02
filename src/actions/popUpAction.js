@@ -1,17 +1,7 @@
-export const setIsOpen = () => {
+export const openClose = (textObj) => {
   const res = {
-    type: "SET_ISOPEN",
-    payload: "open",
+    type: "OPEN_CLOSE",
+    payload: textObj,
   };
-  console.log("open", res);
-  return res;
-};
-
-export const setIsClosed = () => {
-  const res = {
-    type: "SET_ISCLOSED",
-    payload: "false",
-  };
-  console.log("close", res);
   return res;
 };

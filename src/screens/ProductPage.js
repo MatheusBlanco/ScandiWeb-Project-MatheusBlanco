@@ -19,7 +19,7 @@ class ProductPage extends Component {
   };
 
   componentDidMount() {
-    const productId = window.location.pathname.split("/")[2];
+    const productId = window.location.pathname.split("/")[3];
     this.handleProductData(productId);
   }
 
